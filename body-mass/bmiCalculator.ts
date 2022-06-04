@@ -1,5 +1,5 @@
 type categories = "Underweight" | "Normal" | "Overweight" | "Obese";
-const calculateBmi = (height: number, weight: number): string => {
+export const calculateBmi = (height: number, weight: number): string => {
   const bmi: number = weight / (height / 100) ** 2;
   let category: categories;
   if (bmi < 18.5) {
@@ -14,7 +14,7 @@ const calculateBmi = (height: number, weight: number): string => {
   return `${category}`;
 };
 
-interface IBMIArguments {
+/* interface IBMIArguments {
   height: number;
   weight: number;
 }
@@ -38,4 +38,4 @@ try {
     let errorMessage = `Error: ${e.message}`;
     console.log(errorMessage);
   }
-}
+} */
