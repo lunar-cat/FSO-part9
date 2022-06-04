@@ -1,7 +1,6 @@
 type categories = "Underweight" | "Normal" | "Overweight" | "Obese";
 const calculateBmi = (height: number, weight: number): string => {
   const bmi: number = weight / (height / 100) ** 2;
-  console.log("bmi", bmi);
   let category: categories;
   if (bmi < 18.5) {
     category = "Underweight";
@@ -12,9 +11,31 @@ const calculateBmi = (height: number, weight: number): string => {
   } else {
     category = "Obese";
   }
-  return `${category} (${
-    category === "Normal" ? "healthy" : "unhealthy"
-  } weight)`;
+  return `${category}`;
 };
 
-console.log(calculateBmi(180, 74));
+interface IBMIArguments {
+  height: number;
+  weight: number;
+}
+const parseBMIArgs = (args: Array<string>): IBMIArguments => {
+  if (args.length < 4) throw new Error("Not enough arguments");
+  if (args.length > 4) throw new Error("Too many arguments");
+  const argsHaveNaN = args.slice(2).find((arg) => isNaN(Number(arg)));
+  if (argsHaveNaN) {
+    throw new Error(`Argument "${argsHaveNaN}" is not a number`);
+  }
+  const [height, weight] = [Number(args[2]), Number(args[3])];
+  return { height, weight };
+};
+
+try {
+  const { height, weight } = parseBMIArgs(process.argv);
+  const bmiResult = calculateBmi(height, weight);
+  console.log(bmiResult);
+} catch (e: unknown) {
+  if (e instanceof Error) {
+    let errorMessage = `Error: ${e.message}`;
+    console.log(errorMessage);
+  }
+}

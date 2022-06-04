@@ -42,4 +42,28 @@ const calculateExercises = (
   return result;
 };
 
-console.log(calculateExercises([3, 0, 2, 4.5, 0, 3, 1], 2));
+interface ICalcArguments {
+  dailyTime: Array<number>;
+  targetTime: number;
+}
+const parseExerciseArgs = (args: Array<string>): ICalcArguments => {
+  if (args.length < 4) throw new Error("Not enough arguments");
+  const argsHaveNaN = args.slice(2).find((arg) => isNaN(Number(arg)));
+  if (argsHaveNaN) {
+    throw new Error(`Argument "${argsHaveNaN}" is not a number`);
+  }
+  const targetTime = Number(args[2]);
+  const dailyTime = args.slice(3).map((arg) => Number(arg));
+  return { dailyTime, targetTime };
+};
+
+try {
+  const { dailyTime, targetTime } = parseExerciseArgs(process.argv);
+  const exerciseResult = calculateExercises(dailyTime, targetTime);
+  console.log(exerciseResult);
+} catch (e: unknown) {
+  if (e instanceof Error) {
+    let errorMessage = `Error: ${e.message}`;
+    console.log(errorMessage);
+  }
+}
