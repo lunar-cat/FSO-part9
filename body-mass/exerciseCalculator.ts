@@ -63,7 +63,7 @@ try {
   console.log(exerciseResult);
 } catch (e: unknown) {
   if (e instanceof Error) {
-    let errorMessage = `Error: ${e.message}`;
+    const errorMessage = `Error: ${e.message}`;
     console.log(errorMessage);
   }
 }
