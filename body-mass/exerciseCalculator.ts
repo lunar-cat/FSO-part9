@@ -13,7 +13,7 @@ const descriptions = {
   2: "you're almost there, keep it up!",
   3: "you must feel really proud of you, you've made it!",
 };
-const calculateExercises = (
+export const calculateExercises = (
   dailyTime: Array<number>,
   targetTime: number
 ): IResult => {
@@ -42,7 +42,7 @@ const calculateExercises = (
   return result;
 };
 
-interface ICalcArguments {
+/* interface ICalcArguments {
   dailyTime: Array<number>;
   targetTime: number;
 }
@@ -66,4 +66,4 @@ try {
     const errorMessage = `Error: ${e.message}`;
     console.log(errorMessage);
   }
-}
+} */
