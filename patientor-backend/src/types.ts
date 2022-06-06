@@ -14,3 +14,11 @@ export interface Patient {
   occupation: string;
 }
 export type NonSensitivePatient = Omit<Patient, "ssn">;
+export interface ReqBodyPatient {
+  name: unknown;
+  dateOfBirth: unknown;
+  ssn: unknown;
+  gender: unknown;
+  occupation: unknown;
+}
+export type NewPatient = Omit<Patient, "id">;
