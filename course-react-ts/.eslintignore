@@ -1,0 +1,9 @@
+build
+.vscode
+node_modules
+package-lock.json
+package.json
+.gitignore
+public
+.prettierignore
+.prettierrc.json
