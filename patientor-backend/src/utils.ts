@@ -53,6 +53,7 @@ export const toNewPatient = (body: ReqBodyPatient): NewPatient => {
     ssn: parseSSN(ssn),
     gender: parseGender(gender),
     occupation: parseOccupation(occupation),
+    entries: [],
   };
   return newPatient;
 };
