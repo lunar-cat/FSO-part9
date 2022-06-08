@@ -11,6 +11,7 @@ import { useStateValue } from '../state';
 import { TableCell } from '@material-ui/core';
 import { TableRow } from '@material-ui/core';
 import { TableBody } from '@material-ui/core';
+import { Link } from 'react-router-dom';
 
 const PatientListPage = () => {
   const [{ patients }, dispatch] = useStateValue();
@@ -60,6 +61,7 @@ const PatientListPage = () => {
             <TableCell>Gender</TableCell>
             <TableCell>Occupation</TableCell>
             <TableCell>Health Rating</TableCell>
+            <TableCell>Patient Details</TableCell>
           </TableRow>
         </TableHead>
         <TableBody>
@@ -70,6 +72,9 @@ const PatientListPage = () => {
               <TableCell>{patient.occupation}</TableCell>
               <TableCell>
                 <HealthRatingBar showText={false} rating={1} />
+              </TableCell>
+              <TableCell>
+                <Link to={`/patients/${patient.id}`}>Details</Link>
               </TableCell>
             </TableRow>
           ))}
