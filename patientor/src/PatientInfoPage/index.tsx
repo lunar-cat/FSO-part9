@@ -2,8 +2,8 @@ import axios from 'axios';
 import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { apiBaseUrl } from '../constants';
-import { addPatient, useStateValue } from '../state';
-import { Patient } from '../types';
+import { addPatientDetails, useStateValue } from '../state';
+import { Patient, PatientDetails } from '../types';
 
 const findPatientById = (
   patients: { [id: string]: Patient },
@@ -13,22 +13,22 @@ const findPatientById = (
 };
 const PatientInfoPage = () => {
   const [patient, setPatient] = useState<Patient | null>(null);
-  const [{ patients }, dispatch] = useStateValue();
+  const [{ patientsDetails }, dispatch] = useStateValue();
   const { id } = useParams<{ id: string }>();
   useEffect(() => {
     if (!id) return;
     const getPatientInfo = async (): Promise<void> => {
       const url = `${apiBaseUrl}/patients/${id}`;
       try {
-        const { data: patient } = await axios.get<Patient>(url);
+        const { data: patient } = await axios.get<PatientDetails>(url);
         setPatient(patient);
-        dispatch(addPatient(patient));
+        dispatch(addPatientDetails(patient));
         console.log(patient);
       } catch (e: unknown) {
         console.log(e);
       }
     };
-    const cachePatient = findPatientById(patients, id);
+    const cachePatient = findPatientById(patientsDetails, id);
     if (cachePatient) {
       console.log(`using cached: ${id}`);
       setPatient(cachePatient);
