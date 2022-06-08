@@ -55,5 +55,6 @@ export interface ReqBodyPatient {
   ssn: unknown;
   gender: unknown;
   occupation: unknown;
+  entries: unknown;
 }
 export type NewPatient = Omit<Patient, "id">;

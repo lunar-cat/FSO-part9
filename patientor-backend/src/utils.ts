@@ -1,4 +1,4 @@
-import { Gender, NewPatient, ReqBodyPatient } from "./types";
+import { Entry, Gender, NewPatient, ReqBodyPatient } from "./types";
 
 const isString = (text: unknown): text is string => {
   return typeof text === "string" || text instanceof String;
@@ -13,7 +13,6 @@ const isGender = (param: unknown): param is Gender => {
 const isDate = (date: string): boolean => {
   return Boolean(Date.parse(date));
 };
-
 const parseName = (name: unknown): string => {
   if (!name || !isString(name)) {
     throw new Error("Incorrect or missing name");
@@ -44,16 +43,35 @@ const parseOccupation = (occupation: unknown): string => {
   }
   return occupation;
 };
-
+const isEntry = (entries: unknown): entries is Entry[] => {
+  if (Array.isArray(entries)) {
+    const entryTypes = ["HealthCheck", "OccupationalHealthcare", "Hospital"];
+    const areValidEntries = entries.every(({ type }: { type: unknown }) => {
+      if (type && isString(type) && entryTypes.includes(type)) {
+        return true;
+      }
+      return false;
+    });
+    if (areValidEntries) return true;
+    return false;
+  }
+  return false;
+};
+const parseEntries = (entries: unknown): Entry[] => {
+  if (!entries || !isEntry(entries)) {
+    throw new Error("Incorrect or missing entries");
+  }
+  return entries;
+};
 export const toNewPatient = (body: ReqBodyPatient): NewPatient => {
-  const { name, dateOfBirth, ssn, gender, occupation } = body;
+  const { name, dateOfBirth, ssn, gender, occupation, entries } = body;
   const newPatient: NewPatient = {
     name: parseName(name),
     dateOfBirth: parseDateOfBirth(dateOfBirth),
     ssn: parseSSN(ssn),
     gender: parseGender(gender),
     occupation: parseOccupation(occupation),
-    entries: [],
+    entries: parseEntries(entries),
   };
   return newPatient;
 };
