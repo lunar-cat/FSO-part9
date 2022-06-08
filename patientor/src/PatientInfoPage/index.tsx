@@ -2,7 +2,7 @@ import axios from 'axios';
 import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { apiBaseUrl } from '../constants';
-import { useStateValue } from '../state';
+import { addPatient, useStateValue } from '../state';
 import { Patient } from '../types';
 
 const findPatientById = (
@@ -22,7 +22,7 @@ const PatientInfoPage = () => {
       try {
         const { data: patient } = await axios.get<Patient>(url);
         setPatient(patient);
-        dispatch({ type: 'ADD_PATIENT', payload: patient });
+        dispatch(addPatient(patient));
         console.log(patient);
       } catch (e: unknown) {
         console.log(e);
