@@ -3,16 +3,16 @@ import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { apiBaseUrl } from '../constants';
 import { addPatientDetails, useStateValue } from '../state';
-import { Patient, PatientDetails } from '../types';
+import { PatientDetails } from '../types';
 
 const findPatientById = (
-  patients: { [id: string]: Patient },
+  patients: { [id: string]: PatientDetails },
   id: string
-): Patient | undefined => {
+): PatientDetails | undefined => {
   return Object.values(patients).find((p) => p.id === id);
 };
 const PatientInfoPage = () => {
-  const [patient, setPatient] = useState<Patient | null>(null);
+  const [patient, setPatient] = useState<PatientDetails | null>(null);
   const [{ patientsDetails }, dispatch] = useStateValue();
   const { id } = useParams<{ id: string }>();
   useEffect(() => {
@@ -45,6 +45,22 @@ const PatientInfoPage = () => {
       </h2>
       <p>ssn: {patient.ssn}</p>
       <p>occupation: {patient.occupation}</p>
+      <div>
+        <h3>entries</h3>
+        {patient.entries &&
+          patient.entries.map((entry) => (
+            <div key={entry.id}>
+              <p>{entry.date}</p>
+              <p>{entry.description}</p>
+              <ul>
+                {entry.diagnosisCodes &&
+                  entry.diagnosisCodes.map((code) => (
+                    <li key={code}>{code}</li>
+                  ))}
+              </ul>
+            </div>
+          ))}
+      </div>
     </div>
   );
 };
