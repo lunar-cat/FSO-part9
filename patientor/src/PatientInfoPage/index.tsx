@@ -5,15 +5,9 @@ import { apiBaseUrl } from '../constants';
 import { addPatientDetails, useStateValue } from '../state';
 import { PatientDetails } from '../types';
 
-const findPatientById = (
-  patients: { [id: string]: PatientDetails },
-  id: string
-): PatientDetails | undefined => {
-  return Object.values(patients).find((p) => p.id === id);
-};
 const PatientInfoPage = () => {
   const [patient, setPatient] = useState<PatientDetails | null>(null);
-  const [{ patientsDetails }, dispatch] = useStateValue();
+  const [{ patientsDetails, diagnoses }, dispatch] = useStateValue();
   const { id } = useParams<{ id: string }>();
   useEffect(() => {
     if (!id) return;
@@ -28,7 +22,7 @@ const PatientInfoPage = () => {
         console.log(e);
       }
     };
-    const cachePatient = findPatientById(patientsDetails, id);
+    const cachePatient = patientsDetails[id];
     if (cachePatient) {
       console.log(`using cached: ${id}`);
       setPatient(cachePatient);
@@ -55,7 +49,10 @@ const PatientInfoPage = () => {
               <ul>
                 {entry.diagnosisCodes &&
                   entry.diagnosisCodes.map((code) => (
-                    <li key={code}>{code}</li>
+                    <li key={code}>
+                      <span>{code}</span>{' '}
+                      {diagnoses[code] && <span>{diagnoses[code].name}</span>}
+                    </li>
                   ))}
               </ul>
             </div>

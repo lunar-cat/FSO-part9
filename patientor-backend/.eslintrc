@@ -21,7 +21,8 @@
       "error",
       { "argsIgnorePattern": "^_", "ignoreRestSiblings": true }
     ],
-    "no-case-declarations": "off"
+    "no-case-declarations": "off",
+    "@typescript-eslint/array-type": [0, { "default": "array-simple" }]
   },
   "parser": "@typescript-eslint/parser",
   "parserOptions": {
