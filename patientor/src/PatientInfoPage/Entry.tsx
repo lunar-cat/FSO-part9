@@ -12,6 +12,7 @@ import LocalHospitalIcon from '@material-ui/icons/LocalHospital';
 import HealingIcon from '@material-ui/icons/Healing';
 import FavoriteIcon from '@material-ui/icons/Favorite';
 import Container from '@material-ui/core/Container';
+import React from 'react';
 interface BaseEntry {
   diagnoses: { [id: string]: Diagnosis };
 }
@@ -21,19 +22,28 @@ const rateToColor = {
   2: 'yellow',
   3: 'purple'
 };
+const StyledContainer = ({ children }: { children?: React.ReactNode }) => {
+  if (children)
+    return (
+      <Container
+        maxWidth="sm"
+        style={{
+          border: '2px solid green',
+          borderRadius: '8px',
+          marginBottom: '1rem'
+        }}
+      >
+        {children}
+      </Container>
+    );
+  return null;
+};
 interface IHealthProps extends BaseEntry {
   entry: HealthCheckEntry;
 }
 const Health = ({ entry, diagnoses }: IHealthProps) => {
   return (
-    <Container
-      maxWidth="sm"
-      style={{
-        border: '2px solid green',
-        borderRadius: '8px',
-        marginBottom: '1rem'
-      }}
-    >
+    <StyledContainer>
       <p>
         {entry.date}
         <HealingIcon />
@@ -50,7 +60,7 @@ const Health = ({ entry, diagnoses }: IHealthProps) => {
           diagnosesCodes={entry.diagnosisCodes}
         />
       )}
-    </Container>
+    </StyledContainer>
   );
 };
 
@@ -59,14 +69,7 @@ interface IOccupational extends BaseEntry {
 }
 const Occupational = ({ entry, diagnoses }: IOccupational) => {
   return (
-    <Container
-      maxWidth="sm"
-      style={{
-        border: '2px solid green',
-        borderRadius: '8px',
-        marginBottom: '1rem'
-      }}
-    >
+    <StyledContainer>
       <p>
         {entry.date}
         <WorkIcon />
@@ -85,7 +88,7 @@ const Occupational = ({ entry, diagnoses }: IOccupational) => {
           diagnosesCodes={entry.diagnosisCodes}
         />
       )}
-    </Container>
+    </StyledContainer>
   );
 };
 
@@ -94,14 +97,7 @@ interface IHospitalProps extends BaseEntry {
 }
 const Hospital = ({ entry, diagnoses }: IHospitalProps) => {
   return (
-    <Container
-      maxWidth="sm"
-      style={{
-        border: '2px solid green',
-        borderRadius: '8px',
-        marginBottom: '1rem'
-      }}
-    >
+    <StyledContainer>
       <p>
         {entry.date}
         <LocalHospitalIcon />
@@ -117,7 +113,7 @@ const Hospital = ({ entry, diagnoses }: IHospitalProps) => {
           diagnosesCodes={entry.diagnosisCodes}
         />
       )}
-    </Container>
+    </StyledContainer>
   );
 };
 
