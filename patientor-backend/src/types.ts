@@ -1,3 +1,7 @@
+type UnionOmit<T, K extends string | number | symbol> = T extends unknown
+  ? Omit<T, K>
+  : never;
+
 export interface Diagnosis {
   code: string;
   name: string;
@@ -21,16 +25,16 @@ export enum HealthCheckRating {
   "HighRisk" = 2,
   "CriticalRisk" = 3,
 }
-interface HealthCheckEntry extends BaseEntry {
+export interface HealthCheckEntry extends BaseEntry {
   type: "HealthCheck";
   healthCheckRating: HealthCheckRating;
 }
-interface OccupationalHealthcareEntry extends BaseEntry {
+export interface OccupationalHealthcareEntry extends BaseEntry {
   type: "OccupationalHealthcare";
   employerName: string;
   sickLeave?: { startDate: string; endDate: string };
 }
-interface HospitalEntry extends BaseEntry {
+export interface HospitalEntry extends BaseEntry {
   type: "Hospital";
   discharge: { date: string; criteria: string };
 }
@@ -39,6 +43,7 @@ export type Entry =
   | OccupationalHealthcareEntry
   | HospitalEntry;
 
+export type NewEntry = UnionOmit<Entry, "id">;
 export interface Patient {
   id: string;
   name: string;
@@ -56,5 +61,16 @@ export interface ReqBodyPatient {
   gender: unknown;
   occupation: unknown;
   entries: unknown;
+}
+export interface ReqBodyEntry {
+  description: unknown;
+  date: unknown;
+  specialist: unknown;
+  diagnosisCodes?: unknown;
+  type: unknown;
+  healthCheckRating?: unknown;
+  employerName?: unknown;
+  sickLeave?: unknown;
+  discharge?: unknown;
 }
 export type NewPatient = Omit<Patient, "id">;

@@ -1,7 +1,17 @@
-import { Entry, Gender, NewPatient, ReqBodyPatient } from "./types";
+import {
+  Entry,
+  Gender,
+  NewPatient,
+  ReqBodyPatient,
+  ReqBodyEntry,
+  NewEntry,
+} from "./types";
 
 const isString = (text: unknown): text is string => {
   return typeof text === "string" || text instanceof String;
+};
+const isNumber = (param: unknown): param is number => {
+  return !isNaN(Number(param));
 };
 const isGender = (param: unknown): param is Gender => {
   if (isString(param)) {
@@ -74,4 +84,69 @@ export const toNewPatient = (body: ReqBodyPatient): NewPatient => {
     entries: parseEntries(entries),
   };
   return newPatient;
+};
+
+const isBaseEntry = (entry: ReqBodyEntry): boolean => {
+  if (!entry.date || !entry.description || !entry.specialist || !entry.type) {
+    return false;
+  }
+  console.log("pass isBaseEntry");
+  return true;
+};
+const isHealthEntry = (entry: ReqBodyEntry): entry is NewEntry => {
+  if (entry.type && entry.type === "HealthCheck") {
+    if (isNumber(entry.healthCheckRating)) {
+      console.log(
+        "isHealEntry",
+        Number(entry.healthCheckRating),
+        [0, 1, 2, 3].includes(Number(entry.healthCheckRating))
+      );
+      return [0, 1, 2, 3].includes(Number(entry.healthCheckRating));
+    }
+    return false;
+  }
+  return false;
+};
+const isOccupationalEntry = (entry: ReqBodyEntry): entry is NewEntry => {
+  if (entry.type && entry.type === "OccupationalHealthcare") {
+    if (entry.employerName && isString(entry.employerName)) {
+      console.log("isOccupationalEntry");
+      return true;
+    }
+    return false;
+  }
+  return false;
+};
+const isHospitalEntry = (entry: ReqBodyEntry): entry is NewEntry => {
+  if (entry.type && entry.type === "Hospital") {
+    type discharge = { date: string; criteria: string };
+    if (
+      entry.discharge &&
+      (entry.discharge as discharge).date &&
+      (entry.discharge as discharge).criteria &&
+      isString((entry.discharge as discharge).date) &&
+      isString((entry.discharge as discharge).criteria)
+    ) {
+      console.log("isHospital");
+      return true;
+    }
+    return false;
+  }
+  return false;
+};
+const parseEntry = (entry: ReqBodyEntry): NewEntry => {
+  if (
+    entry.type &&
+    isBaseEntry(entry) &&
+    (isHealthEntry(entry) ||
+      isOccupationalEntry(entry) ||
+      isHospitalEntry(entry))
+  ) {
+    return entry;
+  }
+  throw new Error("Incorrect or missing properties from entry");
+};
+export const toNewEntry = (body: ReqBodyEntry): NewEntry => {
+  const entry: NewEntry = parseEntry(body);
+  return entry;
 };
